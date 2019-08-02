@@ -5,7 +5,7 @@ our $debug = 0;
 our $theme_folder = glob "~/.config/themes";
 our $Xresources = glob "~/.Xresources";
 our $Xtheme =  "~/.Xtheme";
-our $autoload = "~/.scripts/tools/reloadlist.sh" #script to load after the theme has been changed.
+our $autoload = "~/.scripts/tools/reloadlist.sh"; #script to load after the theme has been changed.
 chomp(our @themes = `ls $theme_folder`);
 
 chdir glob "~";
@@ -36,9 +36,9 @@ sub process_args() {
 	while (($arg = shift) =~ /-[a-z]/) {
 		&print_help() and exit(0) if $arg =~ /-h/;
 		&print_list() and exit(0) if $arg =~ /-l/;
-		die ("Unknown flag: $arg.");
+		die ("Unknown flag: $arg.\n");
 	}
-	die "Please specify a theme to switch to." unless $arg;
+	die "Please specify a theme to switch to.\n" unless $arg;
 	return $arg;
 }
 
