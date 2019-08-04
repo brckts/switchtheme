@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 
-our $debug = 1;
+our $debug = 0;
 our $theme_folder = glob "~/.config/themes";
 our $Xresources = glob "~/.Xresources";
 our $Xtheme =  "~/.Xtheme";
