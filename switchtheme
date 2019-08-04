@@ -1,11 +1,11 @@
 #!/usr/bin/env perl
 
 
-our $debug = 0;
+our $debug = 1;
 our $theme_folder = glob "~/.config/themes";
 our $Xresources = glob "~/.Xresources";
 our $Xtheme =  "~/.Xtheme";
-our $autoload = "~/.scripts/tools/reloadlist.sh"; #script to load after the theme has been changed.
+our $autoload = "~/.scripts/tools/autostart.sh"; #script to load after the theme has been changed.
 our $desired_theme = "";
 chomp(our @themes = `ls $theme_folder`);
 
@@ -34,10 +34,15 @@ sub check_include() {
 
 sub process_args() {
 	my $arg;
-	while (($arg = shift) =~ /-[a-z]/) {
+	while (($arg = shift) =~ /-\w+/) {
+		print "Processing $arg.\n" if $debug;
 		&print_help() and exit(0) if $arg =~ /-h/;
 		&print_list() and exit(0) if $arg =~ /-l/;
-		$desired_theme = `ls $theme_folder | dmenu -l $themes` if $arg =~ /-dmenu/;
+		if ($arg =~ /-dmenu/) {
+			my $lines = scalar @themes;
+			chomp ($desired_theme = `ls $theme_folder | dmenu -l $lines`);
+			next;
+		}
 		die ("Unknown flag: $arg.\n");
 	}
 	die "Please specify a theme to switch to.\n" unless ($desired_theme or $arg);
@@ -51,6 +56,8 @@ sub print_help() {
 sub print_list() {
 	print join("\n", @themes), "\n";
 }
+
+$desired_theme = &process_args(@ARGV);
 
 $found = 0;
 for $theme (@themes) {
