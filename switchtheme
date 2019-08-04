@@ -6,6 +6,7 @@ our $theme_folder = glob "~/.config/themes";
 our $Xresources = glob "~/.Xresources";
 our $Xtheme =  "~/.Xtheme";
 our $autoload = "~/.scripts/tools/reloadlist.sh"; #script to load after the theme has been changed.
+our $desired_theme = "";
 chomp(our @themes = `ls $theme_folder`);
 
 chdir glob "~";
@@ -36,21 +37,20 @@ sub process_args() {
 	while (($arg = shift) =~ /-[a-z]/) {
 		&print_help() and exit(0) if $arg =~ /-h/;
 		&print_list() and exit(0) if $arg =~ /-l/;
+		$desired_theme = `ls $theme_folder | dmenu -l $themes` if $arg =~ /-dmenu/;
 		die ("Unknown flag: $arg.\n");
 	}
-	die "Please specify a theme to switch to.\n" unless $arg;
-	return $arg;
+	die "Please specify a theme to switch to.\n" unless ($desired_theme or $arg);
+	$desired_theme or $arg;
 }
 
 sub print_help() {
-	print "Usage:\n\tswitchtheme [-lh] [theme]\nFlags:\n\t -h: Print this message.\n\t -l: List available themes.\n";
+	print "Usage:\n\tswitchtheme [-lh] [theme]\nFlags:\n\t -h: Print this message.\n\t -l: List available themes.\n\t -dmenu: Choose theme in a dmenu prompt.\n";
 }
 
 sub print_list() {
 	print join("\n", @themes), "\n";
 }
-
-my $desired_theme = &process_args(@ARGV);
 
 $found = 0;
 for $theme (@themes) {
