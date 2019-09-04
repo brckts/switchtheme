@@ -1,11 +1,10 @@
 #!/usr/bin/env perl
 
 
-our $debug = 1;
+our $debug = 0;
 our $theme_folder = glob "~/.config/themes";
 our $Xresources = glob "~/.Xresources";
 our $Xtheme =  "~/.Xtheme";
-our $autoload = "~/.scripts/tools/autostart.sh"; #script to load after the theme has been changed.
 our $desired_theme = "";
 chomp(our @themes = `ls $theme_folder`);
 
@@ -72,4 +71,3 @@ die "Theme not found!\n" unless $found;
 `xrdb ~/.Xresources`;
 
 ## Put whatever you wanna reload after a theme switch here
-`$autoload`;
